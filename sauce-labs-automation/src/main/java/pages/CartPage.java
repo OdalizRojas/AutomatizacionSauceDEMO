@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartPage {
 
@@ -37,8 +39,11 @@ public class CartPage {
     @FindBy(id = "remove-sauce-labs-fleece-jacket")
     WebElement removeButtonJacket;
 
-    public CartPage(WebDriver driver){
-        this.driver=driver;
+    @FindBy(className = "inventory_item_price")
+    List<WebElement> itemPrices;
+
+    public CartPage(WebDriver driver) {
+        this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
@@ -47,39 +52,54 @@ public class CartPage {
         return priceProductIsDisplayed;
     }
 
-    public boolean jacketTextIsDisplayed(){
+    public boolean jacketTextIsDisplayed() {
         boolean jacketLogoIsDisplayed = textJacket.isDisplayed();
         return jacketLogoIsDisplayed;
     }
 
-    public boolean bikeTextIsDisplayed(){
+    public boolean bikeTextIsDisplayed() {
         boolean bikeLogoIsDisplayed = textBike.isDisplayed();
         return bikeLogoIsDisplayed;
     }
-    public Double getBikePrice(){
+
+    public Double getBikePrice() {
         Double bikePrice = Double.parseDouble(textBike.getText());
         return bikePrice;
     }
-    public Double getJacketPrice(){
+
+    public Double getJacketPrice() {
         System.out.println(jacketPrice.getText());
         Double jacket = Double.parseDouble(jacketPrice.getText());
         return jacket;
     }
 
-    public String getCartNumberText(){
+    public String getCartNumberText() {
         String cartNumberText = cartIconNumber.getText();
         return cartNumberText;
     }
 
-    public void clickOnRemoveBikeToCart(){
+    public void clickOnRemoveBikeToCart() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(removeButtonBike));
         removeButtonBike.click();
     }
 
-    public void clickOnRemoveJacketToCart(){
+    public void clickOnRemoveJacketToCart() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(removeButtonJacket));
         removeButtonJacket.click();
     }
+
+    public List<Double> getItemPrices() {
+        List<Double> prices = new ArrayList<>();
+        for (WebElement itemPrice : itemPrices) {
+            String itemPriceText = itemPrice.getText();
+            StringBuilder sb = new StringBuilder(itemPriceText);
+            sb.deleteCharAt(3);
+            System.out.println(sb.toString());
+            prices.add(Double.parseDouble(sb.toString()));
+        }
+        return prices;
+    }
+
 }
