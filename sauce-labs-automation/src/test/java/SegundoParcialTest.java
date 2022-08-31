@@ -1,9 +1,13 @@
+import com.google.common.collect.Ordering;
+import net.bytebuddy.dynamic.TypeResolutionStrategy;
 import org.junit.Assert;
 import org.junit.Test;
 import pages.CartPage;
 import pages.Homepage;
 import pages.LoginPage;
 import utilities.DriverManager;
+
+import java.util.List;
 
 public class SegundoParcialTest extends BaseTest{
 
@@ -23,8 +27,11 @@ public class SegundoParcialTest extends BaseTest{
         Assert.assertTrue(cartPage.bikeTextIsDisplayed());
 
         //Verificar los precios
-        Assert.assertEquals("49.99",cartPage.getJacketPrice());
+        //Assert.assertEquals("49.99",cartPage.getJacketPrice());
         //Assert.assertEquals("$9.99",cartPage.getBikePrice());
+        List<Double> prices = cartPage.getItemPrices();
+        boolean pricesIsDisabled = Ordering.natural().isOrdered(prices);
+        Assert.assertTrue(pricesIsDisabled);
 
         //Verificar que el numero de elementos en el carrito sea 2
         Assert.assertEquals("2",cartPage.getCartNumberText());
